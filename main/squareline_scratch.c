@@ -21,7 +21,7 @@
  /* LCD size */
  #define EXAMPLE_LCD_H_RES (240)
  #define EXAMPLE_LCD_V_RES (280)
- 
+ #define SYSTEM_EN_GPIO 41  // SYSTEM_EN pin
  /* LCD settings */
  #define EXAMPLE_LCD_SPI_NUM (SPI2_HOST)
  #define EXAMPLE_LCD_PIXEL_CLK_HZ (40 * 1000 * 1000)
@@ -65,6 +65,7 @@
  /* LVGL display and touch */
  static lv_display_t *lvgl_disp = NULL;
  
+
  static esp_err_t app_lcd_init(void)
  {
      esp_err_t ret = ESP_OK;
@@ -109,7 +110,7 @@
  
      esp_lcd_panel_reset(lcd_panel);
      esp_lcd_panel_init(lcd_panel);
-     esp_lcd_panel_mirror(lcd_panel, true, true);
+     esp_lcd_panel_mirror(lcd_panel, false, false);
      esp_lcd_panel_disp_on_off(lcd_panel, true);
  
      /* LCD backlight on */
@@ -192,22 +193,12 @@
              .buff_dma = true,
          }};
      lvgl_disp = lvgl_port_add_disp(&disp_cfg);
- 
+     lv_disp_rotation_t rotation = LV_DISPLAY_ROTATION_0;  // Set the desired LVGL rotation
+     lv_disp_set_rotation(lvgl_disp, rotation);
+
      return ESP_OK;
  }
  
- static void _app_button_cb(lv_event_t *e)
- {
-     lv_disp_rotation_t rotation = lv_disp_get_rotation(lvgl_disp);
-     rotation++;
-     if (rotation > LV_DISPLAY_ROTATION_270)
-     {
-         rotation = LV_DISPLAY_ROTATION_0;
-     }
- 
-     /* LCD HW rotation */
-     lv_disp_set_rotation(lvgl_disp, rotation);
- }
  
  static void app_main_display(void)
  {
@@ -228,6 +219,19 @@
  
  void app_main(void)
  {
+
+        // Configure GPIO41 as output
+        gpio_config_t io_conf = {
+            .pin_bit_mask = (1ULL << SYSTEM_EN_GPIO),
+            .mode = GPIO_MODE_OUTPUT,
+            .pull_down_en = GPIO_PULLDOWN_DISABLE,
+            .pull_up_en = GPIO_PULLUP_DISABLE,
+            .intr_type = GPIO_INTR_DISABLE
+        };
+        gpio_config(&io_conf);
+    
+        // Set SYSTEM_EN high to enable battery power
+        gpio_set_level(SYSTEM_EN_GPIO, 1);
      /* LCD HW initialization */
      ESP_ERROR_CHECK(app_lcd_init());
  
