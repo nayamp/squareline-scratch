@@ -226,13 +226,13 @@ void ui_event_medDropdown1(lv_event_t * e) {
         lv_obj_add_flag(ui_painMeds, LV_OBJ_FLAG_HIDDEN);
 
         // Unhide the one that matches the selected category
-        if (strcmp(selected, "Allergy") == 0) {
+        if (strcmp(selected, "ALLERGY") == 0) {
             lv_obj_clear_flag(ui_allergyMeds, LV_OBJ_FLAG_HIDDEN);
-        } else if (strcmp(selected, "Antibiotic") == 0) {
+        } else if (strcmp(selected, "ANTIBIOTIC") == 0) {
             lv_obj_clear_flag(ui_antibioticMeds, LV_OBJ_FLAG_HIDDEN);
-        } else if (strcmp(selected, "Anxiety") == 0) {
+        } else if (strcmp(selected, "ANXIETY") == 0) {
             lv_obj_clear_flag(ui_anxietyMeds, LV_OBJ_FLAG_HIDDEN);
-        } else if (strcmp(selected, "Pain") == 0) {
+        } else if (strcmp(selected, "PAIN") == 0) {
             lv_obj_clear_flag(ui_painMeds, LV_OBJ_FLAG_HIDDEN);
         }
     }
