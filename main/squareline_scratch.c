@@ -17,7 +17,7 @@
  //#include "lv_conf.h"
  //#include "lv_demos.h"
  #include "esp_lcd_touch_cst816s.h"
- #include "ui/ui.c"
+ #include "ui.h"
  /* LCD size */
  #define EXAMPLE_LCD_H_RES (240)
  #define EXAMPLE_LCD_V_RES (280)
